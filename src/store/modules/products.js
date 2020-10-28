@@ -1,7 +1,9 @@
 import shop from "@/api/shop";
+import Request from '@/api/request'
 
 const state = {
-  items: []
+  items: [],
+  itemsMore: []
 };
 
 const getters = {
@@ -21,6 +23,10 @@ const mutations = {
     // update products
     state.items = products;
   },
+  setMoreProducts(state, products) {
+    // update products
+    state.itemsMore = products;
+  },
 
   decrementProductInventory(state, product) {
     product.inventory--;
@@ -36,6 +42,13 @@ const actions = {
         commit("setProducts", products);
         resolve();
       });
+    });
+  },
+  fetchRequest({ commit }, payload) {
+    return Request({ commit }, "setMoreProducts", {
+      url: 'api/xxx',
+      body: payload,
+      method: 'POST',
     });
   }
 };

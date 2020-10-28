@@ -13,6 +13,16 @@
           Add to cart
         </button>
       </li>
+      <li v-for="product in productsMore" :key="product.title">
+        {{ product.title }} - {{ product.price }} -
+        {{ product.inventory }}
+        <button
+          :disabled="!productIsInStock(product)"
+          @click="addProductToCart(product)"
+        >
+          Add to cart
+        </button>
+      </li>
     </ul>
   </div>
 </template>
@@ -29,7 +39,8 @@ export default {
 
   computed: {
     ...mapState({
-      products: state => state.products.items
+      products: state => state.products.items,
+      productsMore: state => state.products.itemsMore
     }),
 
     ...mapGetters('products', {
@@ -39,6 +50,7 @@ export default {
 
   methods: {
     ...mapActions({
+      fetchRequest: 'products/fetchRequest',
       fetchProducts: 'products/fetchProducts',
       addProductToCart: 'cart/addProductToCart'
     })
@@ -47,6 +59,7 @@ export default {
   created() {
     this.loading = true
     this.fetchProducts().then(() => (this.loading = false))
+    this.fetchRequest().then((res) => {this.loading = false;})
   }
 }
 </script>
