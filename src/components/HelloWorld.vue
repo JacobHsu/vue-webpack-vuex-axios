@@ -10,6 +10,7 @@
 <script>
 import ProductList from '@/components/ProductList'
 import ShoppingCart from '@/components/ShoppingCart'
+import { apiComments, apiGetPosts, delay2s, apiProfile } from "@/api/api";
 export default {
   name: 'HelloWorld',
   components: {
@@ -18,9 +19,41 @@ export default {
   },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      posts: "",
+      comments: "",
+      profile: "",
     }
-  }
+  },
+  created() {
+    this.onLoad();
+  },
+  methods: {
+    // 获取数据
+    async onLoad() {
+      // 调用api接口，并且提供了两个参数
+      await apiComments({
+        // type: 0,
+        // sort: 1,
+      }).then((res) => {
+        // 获取数据成功后的其他操作
+        this.comments = res[0];
+        console.log("comments", res);
+      });
+      await delay2s();
+
+      apiProfile().then((res) => {
+        this.profile = res;
+        console.log("profile", res);
+      });
+
+      await apiGetPosts().then((res) => {
+        // 获取数据成功后的其他操作
+        this.posts = res[0];
+        console.log("posts", res);
+      });
+    },
+  },
 }
 </script>
 
